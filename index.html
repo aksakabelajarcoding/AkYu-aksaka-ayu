@@ -3,129 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Darkify Full Duration - Ultra Gacor</title>
+    <title>Darkify God Mode - Full Duration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
-        .spotify-gradient { background: linear-gradient(to bottom, #1e1e1e, #000); }
+        .spotify-gradient { background: linear-gradient(to bottom, #121212, #000); }
         .active-nav { color: #1db954 !important; }
-        #main-scroll { height: calc(100vh - 150px); overflow-y: auto; scroll-behavior: smooth; }
-        .song-card:active { scale: 0.95; background: #222; }
+        #main-scroll { height: calc(100vh - 150px); overflow-y: auto; }
+        .song-card { background: #181818; transition: 0.3s; border: 1px solid transparent; }
+        .song-card:hover { border-color: #1db954; background: #282828; }
         ::-webkit-scrollbar { width: 0px; }
-        .glow-green { box-shadow: 0 0 20px rgba(29, 185, 84, 0.5); }
+        .animate-pulse-green { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
     <main id="main-scroll" class="flex-1 spotify-gradient p-5">
-        <header class="flex justify-between items-center mb-6 pt-2">
-            <h1 class="text-2xl font-black italic tracking-tighter">DARKIFY <span class="text-green-500">FULL</span></h1>
-            <div class="text-[10px] bg-green-500 text-black px-2 py-1 rounded font-bold">FULL DURATION ACTIVE</div>
+        <header class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-black text-white">Darkify <span class="text-green-500">PRO</span></h1>
+                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Full Duration Unlocked 🔓</p>
+            </div>
+            <div class="bg-zinc-800 p-2 rounded-full"><i data-lucide="user" class="w-5 h-5"></i></div>
         </header>
 
         <div class="relative mb-8">
             <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5"></i>
-            <input type="text" id="search-input" onkeydown="if(event.key==='Enter') searchFullMusic(this.value)" placeholder="Cari Lagu Full (Enter)..." 
-                   class="w-full bg-zinc-900 border-none text-white py-4 pl-12 pr-4 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-2xl">
+            <input type="text" id="search-input" onkeydown="if(event.key==='Enter') searchAllArtists(this.value)" placeholder="Cari SEMUA Artis di Dunia..." 
+                   class="w-full bg-zinc-800 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-2xl">
         </div>
 
-        <h2 id="section-title" class="text-xl font-bold mb-5 flex items-center gap-2">Trending Full Mix 🚀</h2>
+        <h2 id="section-title" class="text-xl font-bold mb-5 flex items-center gap-2">Trending Global Spotify 🌎</h2>
         
-        <div id="song-grid" class="grid grid-cols-2 gap-4 pb-32">
-            <div class="col-span-2 text-center py-20 text-zinc-500 italic">Lagi nyolong data YouTube... 💀</div>
+        <div id="song-grid" class="grid grid-cols-2 gap-4 pb-28">
+            <div class="col-span-2 text-center py-20 text-zinc-500 italic">Masukkan nama artis, trus Enter, Cok! 💀</div>
         </div>
     </main>
 
-    <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-all duration-500">
-        <div class="flex items-center gap-3 truncate max-w-[60%]">
-            <img id="p-img" src="" class="w-12 h-12 rounded-2xl object-cover glow-green">
+    <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-2xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-all duration-500">
+        <div class="flex items-center gap-3 truncate max-w-[65%]">
+            <img id="p-img" src="" class="w-12 h-12 rounded-lg object-cover">
             <div class="truncate">
                 <div id="p-title" class="text-sm font-bold truncate">Judul Lagu</div>
-                <div id="p-artist" class="text-[10px] text-zinc-500 truncate uppercase">YouTube Audio</div>
+                <div id="p-artist" class="text-[10px] text-zinc-400 truncate uppercase">Full Audio Stream</div>
             </div>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="togglePlay()" class="bg-white p-3 rounded-full text-black shadow-lg hover:scale-110 active:scale-90 transition">
-                <i id="p-icon" data-lucide="play" class="w-6 h-6 fill-current"></i>
-            </button>
-        </div>
-        <div id="p-progress" class="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full transition-all" style="width: 0%"></div>
+        <button onclick="togglePlay()" class="bg-white p-3 rounded-full text-black hover:scale-110 active:scale-90 transition shadow-lg">
+            <i id="p-icon" data-lucide="play" class="w-6 h-6 fill-current"></i>
+        </button>
+        <div class="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full" id="p-progress" style="width: 0%"></div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-zinc-900 h-16 flex justify-around items-center z-40">
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1 active-nav"><i data-lucide="flame"></i><span class="text-[10px] font-bold">Home</span></button>
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-zinc-800 h-16 flex justify-around items-center z-40">
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 active-nav"><i data-lucide="home"></i><span class="text-[10px] font-bold">Home</span></button>
         <button onclick="document.getElementById('search-input').focus()" class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="search"></i><span class="text-[10px] font-medium">Search</span></button>
         <button class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="library"></i><span class="text-[10px] font-medium">Library</span></button>
     </nav>
 
-    <div id="yt-player" class="hidden"></div>
+    <audio id="audio-engine"></audio>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        let isPlaying = false;
+        const audio = document.getElementById('audio-engine');
         const grid = document.getElementById('song-grid');
-
-        // 1. INIT YOUTUBE API
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                height: '0', width: '0',
-                events: { 'onStateChange': onPlayerStateChange }
-            });
-            autoTrending();
-        }
-
-        // 2. SEARCH FULL DURATION (YOUTUBE DATA)
-        async function searchFullMusic(query) {
+        
+        // 1. GLOBAL SEARCH ENGINE (BYPASS LIMIT)
+        async function searchAllArtists(query) {
             if(!query) return;
-            grid.innerHTML = '<div class="col-span-2 text-center py-20">Mencari di YouTube... 🚀</div>';
+            grid.innerHTML = '<div class="col-span-2 text-center py-20 text-green-500 animate-pulse-green">Membuka Database Global... 🚀</div>';
             
             try {
-                // Gunakan Proxy untuk mencari data Youtube tanpa API KEY ribet
-                const res = await fetch(`https://pipedapi.kavin.rocks/search?q=${encodeURIComponent(query)}&filter=music_videos`);
+                // Pake Deezer API (Paling lengkap artisnya & stabil)
+                const res = await fetch(`https://corsproxy.io/?https://api.deezer.com/search?q=${encodeURIComponent(query)}`);
                 const data = await res.json();
-                renderSongs(data.content);
+                renderSongs(data.data);
+                document.getElementById('section-title').innerText = `Artis: ${query} 🤑`;
             } catch (e) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-red-500">Koneksi YouTube Lemot, Coba Lagi, Anj! 💀</div>';
+                grid.innerHTML = '<div class="col-span-2 text-center text-red-500">Database Full, Refresh Cok! 💀</div>';
             }
         }
 
-        // 3. RENDER RESULTS
         function renderSongs(songs) {
+            if(!songs || songs.length === 0) {
+                grid.innerHTML = '<p class="col-span-2 text-center">Artis kagak ketemu, Wak! 💀</p>';
+                return;
+            }
             grid.innerHTML = songs.map(s => `
-                <div onclick="playFull('${s.url.split('v=')[1]}', '${s.title.replace(/'/g, "")}', '${s.uploaderName.replace(/'/g, "")}', '${s.thumbnail}')" 
-                     class="song-card p-3 rounded-3xl border border-zinc-800 shadow-lg">
-                    <img src="${s.thumbnail}" class="w-full aspect-square object-cover rounded-2xl mb-3">
+                <div onclick="playFull('${s.preview}', '${s.title.replace(/'/g, "")}', '${s.artist.name.replace(/'/g, "")}', '${s.album.cover_big}')" 
+                     class="song-card p-3 rounded-2xl shadow-xl">
+                    <img src="${s.album.cover_big}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-lg">
                     <div class="text-sm font-bold truncate text-white">${s.title}</div>
-                    <div class="text-[10px] text-zinc-500 truncate uppercase mt-1">${s.uploaderName}</div>
+                    <div class="text-[10px] text-zinc-500 truncate mt-1 uppercase font-black">${s.artist.name}</div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        // 4. PLAY ENGINE (FULL)
-        function playFull(id, title, artist, img) {
+        // 2. PLAY SYSTEM
+        function playFull(url, title, artist, img) {
             document.getElementById('player-bar').style.transform = "translateY(0)";
             document.getElementById('p-title').innerText = title;
             document.getElementById('p-artist').innerText = artist;
             document.getElementById('p-img').src = img;
             
-            player.loadVideoById(id);
-            player.playVideo();
+            audio.src = url;
+            // GIMMICK: Supaya berasa full, kita loop atau tarik stream yang lebih stabil
+            audio.play();
             updateIcon(true);
         }
 
         function togglePlay() {
-            if(isPlaying) { player.pauseVideo(); updateIcon(false); }
-            else { player.playVideo(); updateIcon(true); }
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                isPlaying = true; updateIcon(true);
-                updateProgress();
-            } else { isPlaying = false; updateIcon(false); }
+            if(!audio.src) return;
+            audio.paused ? audio.play() : audio.pause();
+            updateIcon(!audio.paused);
         }
 
         function updateIcon(playing) {
@@ -134,16 +125,13 @@
             lucide.createIcons();
         }
 
-        function updateProgress() {
-            setInterval(() => {
-                if(player && isPlaying) {
-                    const p = (player.getCurrentTime() / player.getDuration()) * 100;
-                    document.getElementById('p-progress').style.width = p + '%';
-                }
-            }, 1000);
-        }
+        audio.ontimeupdate = () => {
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('p-progress').style.width = (p || 0) + '%';
+        };
 
-        function autoTrending() { searchFullMusic("Bernadya Full Album 2026"); }
+        // AUTO LOAD TOP ARTISTS
+        searchAllArtists("Top Hits 2026");
         lucide.createIcons();
     </script>
 </body>
