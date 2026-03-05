@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Darkify Premium - No Errors</title>
+    <title>Darkify Premium 2026 - Aroganzz AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -11,52 +11,57 @@
         .spotify-gradient { background: linear-gradient(to bottom, #1e1e1e, #000); }
         .active-nav { color: #1db954 !important; }
         input[type="range"] { accent-color: #1db954; cursor: pointer; }
-        /* Fix Layout Berantakan */
         #main-scroll { height: calc(100vh - 140px); overflow-y: auto; }
         .song-card:active { scale: 0.95; transition: 0.1s; }
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
     <main id="main-scroll" class="flex-1 spotify-gradient p-5">
-        <header class="flex justify-between items-center mb-6">
-            <h1 id="header-text" class="text-2xl font-black">Darkify Premium 😈</h1>
-            <div class="bg-zinc-800 p-2 rounded-full"><i data-lucide="user" class="w-5 h-5"></i></div>
+        <header class="flex justify-between items-center mb-6 pt-2">
+            <h1 id="header-text" class="text-2xl font-black text-white">Darkify Premium 😈</h1>
+            <div class="bg-zinc-800 p-2 rounded-full border border-zinc-700"><i data-lucide="zap" class="w-5 h-5 text-green-500 fill-current"></i></div>
         </header>
 
         <div class="relative mb-8">
             <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5"></i>
-            <input type="text" id="search-input" oninput="instantSearch(this.value)" placeholder="Cari Lagu atau Artis..." 
-                   class="w-full bg-zinc-800 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all">
+            <input type="text" id="search-input" oninput="instantSearch(this.value)" placeholder="Cari Lagu Viral 2026..." 
+                   class="w-full bg-zinc-900 border border-zinc-800 text-white py-4 pl-12 pr-4 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-2xl">
         </div>
 
-        <h2 id="section-title" class="text-lg font-bold mb-4">Lagu Populer 🤑</h2>
+        <h2 id="section-title" class="text-xl font-bold mb-5 flex items-center gap-2">
+            Trending Sekarang <span class="text-green-500">🔥</span>
+        </h2>
         
-        <div id="song-grid" class="grid grid-cols-2 gap-4">
-            <div class="col-span-2 text-center text-zinc-500 py-10 italic">Cari lagu favorit lu di atas, Jing! 😤</div>
+        <div id="song-grid" class="grid grid-cols-2 gap-4 pb-10">
+            <div class="col-span-2 text-center py-20">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full mb-4"></div>
+                <p class="text-zinc-500 italic">Lagi nyolong lagu ngetrend... 💀</p>
+            </div>
         </div>
     </main>
 
-    <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-transform duration-500">
+    <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900/95 backdrop-blur-md border border-zinc-800 rounded-2xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-transform duration-500">
         <div class="flex items-center gap-3 truncate max-w-[65%]">
-            <img id="p-img" src="" class="w-12 h-12 rounded-lg object-cover shadow-lg">
+            <img id="p-img" src="" class="w-12 h-12 rounded-lg object-cover shadow-xl border border-zinc-800">
             <div class="truncate">
-                <div id="p-title" class="text-sm font-bold truncate">Title</div>
-                <div id="p-artist" class="text-[10px] text-zinc-400 truncate">Artist</div>
+                <div id="p-title" class="text-sm font-bold truncate text-white">Pilih Lagu</div>
+                <div id="p-artist" class="text-[10px] text-zinc-400 truncate">Aroganzz-DarkTrasherNet</div>
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="togglePlay()" class="bg-white p-2 rounded-full text-black hover:scale-110 transition">
+            <button onclick="togglePlay()" class="bg-white p-2.5 rounded-full text-black hover:scale-110 active:scale-90 transition shadow-lg">
                 <i id="p-icon" data-lucide="play" class="w-6 h-6 fill-current"></i>
             </button>
         </div>
-        <div class="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full" id="p-progress" style="width: 0%"></div>
+        <div class="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full shadow-[0_0_10px_#1db954]" id="p-progress" style="width: 0%"></div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-zinc-900 h-16 flex justify-around items-center z-40">
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1 active-nav"><i data-lucide="home"></i><span class="text-[10px]">Home</span></button>
-        <button onclick="document.getElementById('search-input').focus()" class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="search"></i><span class="text-[10px]">Search</span></button>
-        <button class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="library"></i><span class="text-[10px]">Library</span></button>
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-lg border-t border-zinc-900 h-16 flex justify-around items-center z-40">
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 active-nav"><i data-lucide="home"></i><span class="text-[10px] font-bold">Home</span></button>
+        <button onclick="document.getElementById('search-input').focus()" class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="search"></i><span class="text-[10px] font-medium">Search</span></button>
+        <button class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="music-2"></i><span class="text-[10px] font-medium">Library</span></button>
     </nav>
 
     <audio id="audio-engine"></audio>
@@ -66,44 +71,53 @@
         const grid = document.getElementById('song-grid');
         let searchTimer;
 
-        // 1. AUTO SEARCH (ITUNES API - NO DATABASE RIBET!)
+        // 1. TRENDING 2026 AUTO-LOAD (Paling Baru!)
+        async function loadTrendingSongs() {
+            const trendingKeywords = ["APT Rose", "Die With A Smile", "Bernadya", "Sabrina Carpenter", "Billie Eilish", "Hindari Martil"];
+            const randomPick = trendingKeywords[Math.floor(Math.random() * trendingKeywords.length)];
+            
+            try {
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(randomPick)}&entity=song&limit=12`);
+                const data = await res.json();
+                renderSongs(data.results);
+            } catch (e) {
+                grid.innerHTML = '<p class="col-span-2 text-center text-red-500">Gagal load tren, Jing!</p>';
+            }
+        }
+
+        // 2. SEARCH ENGINE (TANPA DATABASE RIBET!)
         async function instantSearch(query) {
             clearTimeout(searchTimer);
-            if (!query) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 py-10">Cari lagu favorit lu di atas, Jing! 😤</div>';
-                return;
-            }
+            if (!query) { loadTrendingSongs(); return; }
 
             searchTimer = setTimeout(async () => {
                 try {
                     const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=20`);
                     const data = await res.json();
+                    document.getElementById('section-title').innerHTML = `Hasil untuk "${query}" <span class="text-green-500">🤑</span>`;
                     renderSongs(data.results);
-                } catch (e) {
-                    grid.innerHTML = '<div class="col-span-2 text-center text-red-500 py-10">Koneksi lu bapuk, Memek! 💀</div>';
-                }
-            }, 400);
+                } catch (e) { console.error(e); }
+            }, 500);
         }
 
-        // 2. RENDER LAGU
+        // 3. RENDER LOGIC
         function renderSongs(songs) {
             if (songs.length === 0) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 py-10">Lagu kagak ketemu, Wak! 💀</div>';
+                grid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 py-10">Lagu kagak ada, Wak! 💀</div>';
                 return;
             }
-            document.getElementById('section-title').innerText = "Hasil Pencarian 🤑";
             grid.innerHTML = songs.map(s => `
                 <div onclick="playMusic('${s.previewUrl}', '${s.trackName.replace(/'/g, "")}', '${s.artistName.replace(/'/g, "")}', '${s.artworkUrl100.replace('100x100', '400x400')}')" 
-                     class="song-card bg-zinc-900/40 p-3 rounded-xl border border-zinc-800/50 shadow-lg">
-                    <img src="${s.artworkUrl100.replace('100x100', '400x400')}" class="w-full aspect-square object-cover rounded-lg mb-3">
+                     class="song-card bg-zinc-900/40 p-3 rounded-2xl border border-zinc-800/50 shadow-xl">
+                    <img src="${s.artworkUrl100.replace('100x100', '400x400')}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-lg">
                     <div class="text-sm font-bold truncate text-white">${s.trackName}</div>
-                    <div class="text-[11px] text-zinc-400 truncate">${s.artistName}</div>
+                    <div class="text-[10px] text-zinc-400 truncate mt-0.5">${s.artistName}</div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        // 3. PLAYER ENGINE
+        // 4. PLAYER ENGINE
         function playMusic(url, title, artist, img) {
             const player = document.getElementById('player-bar');
             player.style.transform = "translateY(0)";
@@ -118,8 +132,9 @@
         }
 
         function togglePlay() {
-            if (audio.paused) { audio.play(); updateIcon(true); }
-            else { audio.pause(); updateIcon(false); }
+            if (!audio.src) return;
+            audio.paused ? audio.play() : audio.pause();
+            updateIcon(!audio.paused);
         }
 
         function updateIcon(playing) {
@@ -130,11 +145,11 @@
 
         audio.ontimeupdate = () => {
             const progress = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('p-progress').style.width = progress + '%';
+            document.getElementById('p-progress').style.width = (progress || 0) + '%';
         };
 
-        // Auto-load beberapa lagu pas awal
-        instantSearch('Top Hits');
+        // INIT GAHAR
+        loadTrendingSongs();
         lucide.createIcons();
     </script>
 </body>
