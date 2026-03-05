@@ -3,104 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Darkify - No Database Edition</title>
+    <title>Darkify Premium - No Errors</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+        body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
         .spotify-gradient { background: linear-gradient(to bottom, #1e1e1e, #000); }
         .active-nav { color: #1db954 !important; }
-        .player-bar { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(10px); }
-        input[type="range"] { accent-color: #1db954; height: 3px; }
+        input[type="range"] { accent-color: #1db954; cursor: pointer; }
+        /* Fix Layout Berantakan */
+        #main-scroll { height: calc(100vh - 140px); overflow-y: auto; }
         .song-card:active { scale: 0.95; transition: 0.1s; }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
-    <main id="main-scroll" class="flex-1 overflow-y-auto spotify-gradient pb-40">
+    <main id="main-scroll" class="flex-1 spotify-gradient p-5">
+        <header class="flex justify-between items-center mb-6">
+            <h1 id="header-text" class="text-2xl font-black">Darkify Premium 😈</h1>
+            <div class="bg-zinc-800 p-2 rounded-full"><i data-lucide="user" class="w-5 h-5"></i></div>
+        </header>
+
+        <div class="relative mb-8">
+            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5"></i>
+            <input type="text" id="search-input" oninput="instantSearch(this.value)" placeholder="Cari Lagu atau Artis..." 
+                   class="w-full bg-zinc-800 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all">
+        </div>
+
+        <h2 id="section-title" class="text-lg font-bold mb-4">Lagu Populer 🤑</h2>
         
-        <div id="page-home" class="p-5">
-            <header class="flex justify-between items-center mb-8 pt-4">
-                <h1 class="text-2xl font-black">Darkify Auto-Search 😈</h1>
-                <div class="bg-zinc-800 p-2 rounded-full"><i data-lucide="user" class="w-5 h-5"></i></div>
-            </header>
-
-            <div class="relative mb-8">
-                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5"></i>
-                <input type="text" id="search-input" oninput="autoSearch(this.value)" placeholder="Cari Lagu/Artis (Contoh: Daniel Caesar)" 
-                       class="w-full bg-zinc-800 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-2xl">
-            </div>
-
-            <h2 id="grid-title" class="text-xl font-bold mb-4">Lagu Populer Sekarang 🤑</h2>
-            <div id="result-grid" class="grid grid-cols-2 gap-4">
-                <div class="col-span-2 text-center text-zinc-500 pt-10">Ketik sesuatu di atas, Jing! 😤</div>
-            </div>
+        <div id="song-grid" class="grid grid-cols-2 gap-4">
+            <div class="col-span-2 text-center text-zinc-500 py-10 italic">Cari lagu favorit lu di atas, Jing! 😤</div>
         </div>
     </main>
 
-    <div id="player-ui" class="fixed bottom-20 left-3 right-3 player-bar rounded-xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-transform duration-500 border border-zinc-800">
-        <div class="flex items-center gap-3 truncate max-w-[60%]">
-            <img id="p-img" src="" class="w-12 h-12 rounded-lg shadow-lg">
+    <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-transform duration-500">
+        <div class="flex items-center gap-3 truncate max-w-[65%]">
+            <img id="p-img" src="" class="w-12 h-12 rounded-lg object-cover shadow-lg">
             <div class="truncate">
-                <div id="p-title" class="text-sm font-bold truncate text-white">Title</div>
+                <div id="p-title" class="text-sm font-bold truncate">Title</div>
                 <div id="p-artist" class="text-[10px] text-zinc-400 truncate">Artist</div>
             </div>
         </div>
-        <div class="flex items-center gap-5">
-            <button onclick="togglePlay()" class="bg-white p-2 rounded-full text-black">
+        <div class="flex items-center gap-4">
+            <button onclick="togglePlay()" class="bg-white p-2 rounded-full text-black hover:scale-110 transition">
                 <i id="p-icon" data-lucide="play" class="w-6 h-6 fill-current"></i>
             </button>
         </div>
         <div class="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full" id="p-progress" style="width: 0%"></div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-zinc-900 h-16 flex justify-around items-center z-40">
-        <button class="flex flex-col items-center gap-1 active-nav"><i data-lucide="home"></i><span class="text-[10px]">Home</span></button>
-        <button class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="search"></i><span class="text-[10px]">Explore</span></button>
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-zinc-900 h-16 flex justify-around items-center z-40">
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 active-nav"><i data-lucide="home"></i><span class="text-[10px]">Home</span></button>
+        <button onclick="document.getElementById('search-input').focus()" class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="search"></i><span class="text-[10px]">Search</span></button>
         <button class="flex flex-col items-center gap-1 text-zinc-500"><i data-lucide="library"></i><span class="text-[10px]">Library</span></button>
     </nav>
 
-    <audio id="audio-core"></audio>
+    <audio id="audio-engine"></audio>
 
     <script>
-        const audio = document.getElementById('audio-core');
-        const searchInput = document.getElementById('search-input');
-        const resultGrid = document.getElementById('result-grid');
-        const playerUi = document.getElementById('player-ui');
-        let searchTimeout;
+        const audio = document.getElementById('audio-engine');
+        const grid = document.getElementById('song-grid');
+        let searchTimer;
 
-        // 1. AUTO SEARCH ENGINE (Pake iTunes API - Legal & Kenceng)
-        function autoSearch(query) {
-            clearTimeout(searchTimeout);
+        // 1. AUTO SEARCH (ITUNES API - NO DATABASE RIBET!)
+        async function instantSearch(query) {
+            clearTimeout(searchTimer);
             if (!query) {
-                resultGrid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 pt-10">Ketik sesuatu, Kontol! 😤</div>';
+                grid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 py-10">Cari lagu favorit lu di atas, Jing! 😤</div>';
                 return;
             }
 
-            // Debounce biar gak jebol requestnya
-            searchTimeout = setTimeout(async () => {
+            searchTimer = setTimeout(async () => {
                 try {
                     const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=20`);
                     const data = await res.json();
-                    renderResults(data.results);
+                    renderSongs(data.results);
                 } catch (e) {
-                    console.error("Eror nyari lagu, Jing!", e);
+                    grid.innerHTML = '<div class="col-span-2 text-center text-red-500 py-10">Koneksi lu bapuk, Memek! 💀</div>';
                 }
-            }, 500);
+            }, 400);
         }
 
-        // 2. RENDER HASIL SEARCH
-        function renderResults(songs) {
+        // 2. RENDER LAGU
+        function renderSongs(songs) {
             if (songs.length === 0) {
-                resultGrid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 pt-10">Lagu gak ketemu, Wak! 💀</div>';
+                grid.innerHTML = '<div class="col-span-2 text-center text-zinc-500 py-10">Lagu kagak ketemu, Wak! 💀</div>';
                 return;
             }
-
-            document.getElementById('grid-title').innerText = "Hasil Pencarian Lu 🤑";
-            resultGrid.innerHTML = songs.map(s => `
+            document.getElementById('section-title').innerText = "Hasil Pencarian 🤑";
+            grid.innerHTML = songs.map(s => `
                 <div onclick="playMusic('${s.previewUrl}', '${s.trackName.replace(/'/g, "")}', '${s.artistName.replace(/'/g, "")}', '${s.artworkUrl100.replace('100x100', '400x400')}')" 
-                     class="song-card bg-zinc-900/40 p-3 rounded-xl shadow-lg border border-zinc-800/50">
-                    <img src="${s.artworkUrl100.replace('100x100', '400x400')}" class="w-full aspect-square object-cover rounded-lg mb-3 shadow-2xl">
+                     class="song-card bg-zinc-900/40 p-3 rounded-xl border border-zinc-800/50 shadow-lg">
+                    <img src="${s.artworkUrl100.replace('100x100', '400x400')}" class="w-full aspect-square object-cover rounded-lg mb-3">
                     <div class="text-sm font-bold truncate text-white">${s.trackName}</div>
                     <div class="text-[11px] text-zinc-400 truncate">${s.artistName}</div>
                 </div>
@@ -108,9 +103,11 @@
             lucide.createIcons();
         }
 
-        // 3. PLAYER SYSTEM
+        // 3. PLAYER ENGINE
         function playMusic(url, title, artist, img) {
-            playerUi.style.transform = "translateY(0)";
+            const player = document.getElementById('player-bar');
+            player.style.transform = "translateY(0)";
+            
             document.getElementById('p-title').innerText = title;
             document.getElementById('p-artist').innerText = artist;
             document.getElementById('p-img').src = img;
@@ -136,34 +133,8 @@
             document.getElementById('p-progress').style.width = progress + '%';
         };
 
-        // Init Lucide
-        lucide.createIcons();
-    </script>
-</body>
-</html>
-               { title: "NetViper Mode", artist: "Cyber Lord", song_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover_url: "https://picsum.photos/seed/2/300/300" },
-                { title: "Broken Filter", artist: "No Ethics", song_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover_url: "https://picsum.photos/seed/3/300/300" }
-            ];
-            for (let s of dummy) {
-                await fetch(`${SB_URL}/rest/v1/music`, {
-                    method: 'POST',
-                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(s)
-                });
-            }
-            fetchSongs();
-            alert("BERES TUAN! Gudang udah penuh lagu. 🤑");
-        }
-
-        // 5. NAVIGASI
-        function showPage(p) {
-            document.getElementById('page-home').classList.toggle('hidden', p !== 'home');
-            document.getElementById('page-search').classList.toggle('hidden', p !== 'search');
-            document.getElementById('nav-home').classList.toggle('active-nav', p === 'home');
-            document.getElementById('nav-search').classList.toggle('active-nav', p === 'search');
-        }
-
-        fetchSongs();
+        // Auto-load beberapa lagu pas awal
+        instantSearch('Top Hits');
         lucide.createIcons();
     </script>
 </body>
