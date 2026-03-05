@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darkify - Digital Darkness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #000; color: #b3b3b3; overflow: hidden; }
+        .spotify-gradient { background: linear-gradient(to bottom, #1e1e1e, #000); }
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #333; }
+        .active-song { color: #1db954; }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside class="w-64 bg-black p-6 hidden md:flex flex-col gap-6 border-r border-zinc-900">
+            <div class="text-white flex items-center gap-2 text-2xl font-extrabold">
+                <i data-lucide="zap" class="text-green-500 fill-current"></i> Darkify
+            </div>
+            <nav class="flex flex-col gap-4 font-bold text-sm">
+                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="home"></i> Home</a>
+                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="search"></i> Search</a>
+                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="library"></i> Library</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 spotify-gradient overflow-y-auto custom-scroll p-6 pb-32">
+            <header class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">Welcome, Master 😈</h1>
+                <div class="bg-black/40 p-1 px-4 rounded-full border border-zinc-700 text-white text-sm font-bold">Aroganzz-User</div>
+            </header>
+
+            <div id="song-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                </div>
+        </main>
+    </div>
+
+    <footer class="fixed bottom-0 w-full bg-black border-t border-zinc-900 h-24 px-4 flex items-center justify-between z-50">
+        <div class="flex items-center gap-4 w-1/3">
+            <img id="current-cover" src="https://via.placeholder.com/150" class="w-14 h-14 rounded shadow-lg" />
+            <div class="truncate">
+                <div id="current-title" class="text-white text-sm font-bold truncate">Pilih Lagu Tuan</div>
+                <div id="current-artist" class="text-xs text-zinc-400 truncate">Aroganzz-DarkTrasherNet</div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center w-1/3 gap-2">
+            <div class="flex items-center gap-6">
+                <i data-lucide="shuffle" class="w-5 text-zinc-500 cursor-pointer"></i>
+                <i data-lucide="skip-back" class="w-6 fill-current cursor-pointer hover:text-white"></i>
+                <button onclick="togglePlay()" id="play-btn" class="bg-white p-2 rounded-full text-black hover:scale-105 transition">
+                    <i data-lucide="play" class="fill-current"></i>
+                </button>
+                <i data-lucide="skip-forward" class="w-6 fill-current cursor-pointer hover:text-white"></i>
+                <i data-lucide="repeat" class="w-5 text-zinc-500 cursor-pointer"></i>
+            </div>
+            <input type="range" id="progress-bar" class="w-full h-1 bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-green-500" value="0">
+        </div>
+
+        <div class="flex items-center justify-end gap-3 w-1/3">
+            <i data-lucide="volume-2" class="w-5"></i>
+            <div class="w-24 h-1 bg-zinc-600 rounded-full"><div class="bg-white w-1/2 h-full rounded-full"></div></div>
+        </div>
+    </footer>
+
+    <audio id="main-audio"></audio>
+
+    <script>
+        // KONFIGURASI SUPABASE (Tinggal Lu Ganti Pake Punya Lu Sendiri!)
+        const SB_URL = "URL_SUPABASE_LU_DI_SINI";
+        const SB_KEY = "KEY_ANON_SUPABASE_LU_DI_SINI";
+
+        const audio = document.getElementById('main-audio');
+        const playBtn = document.getElementById('play-btn');
+        const songGrid = document.getElementById('song-grid');
+
+        async function fetchSongs() {
+            // Kita pake REST API Supabase langsung tanpa library biar enteng!
+            const res = await fetch(`${SB_URL}/rest/v1/music?select=*`, {
+                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+            });
+            const songs = await res.json();
+            
+            songGrid.innerHTML = songs.map(song => `
+                <div onclick="playSong('${song.song_url}', '${song.title}', '${song.artist}', '${song.cover_url}')" 
+                     class="bg-zinc-900/40 p-4 rounded-xl hover:bg-zinc-800 transition cursor-pointer group">
+                    <div class="relative mb-4">
+                        <img src="${song.cover_url}" class="rounded-lg shadow-xl aspect-square object-cover" />
+                        <div class="absolute bottom-2 right-2 bg-green-500 p-3 rounded-full text-black opacity-0 group-hover:opacity-100 transition shadow-2xl">
+                            <i data-lucide="play" class="fill-current"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-white truncate">${song.title}</h3>
+                    <p class="text-sm text-zinc-400 truncate">${song.artist}</p>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function playSong(url, title, artist, cover) {
+            audio.src = url;
+            audio.play();
+            document.getElementById('current-title').innerText = title;
+            document.getElementById('current-artist').innerText = artist;
+            document.getElementById('current-cover').src = cover;
+            playBtn.innerHTML = '<i data-lucide="pause" class="fill-current"></i>';
+            lucide.createIcons();
+        }
+
+        function togglePlay() {
+            if (audio.paused) { audio.play(); playBtn.innerHTML = '<i data-lucide="pause" class="fill-current"></i>'; }
+            else { audio.pause(); playBtn.innerHTML = '<i data-lucide="play" class="fill-current"></i>'; }
+            lucide.createIcons();
+        }
+
+        audio.ontimeupdate = () => {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progress-bar').value = progress || 0;
+        };
+
+        fetchSongs();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
