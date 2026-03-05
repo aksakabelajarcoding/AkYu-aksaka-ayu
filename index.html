@@ -1,126 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darkify - Digital Darkness</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Darkify Premium - Aroganzz AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { background-color: #000; color: #b3b3b3; overflow: hidden; }
-        .spotify-gradient { background: linear-gradient(to bottom, #1e1e1e, #000); }
-        .custom-scroll::-webkit-scrollbar { width: 8px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #333; }
-        .active-song { color: #1db954; }
+        body { background-color: #121212; color: #b3b3b3; overflow: hidden; font-family: sans-serif; }
+        .spotify-gradient { background: linear-gradient(to bottom, #2a2a2a 0%, #121212 100%); }
+        .active-nav { color: #1db954 !important; }
+        input[type="range"] { accent-color: #1db954; }
+        .truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
 <body class="h-screen flex flex-col">
 
     <div class="flex flex-1 overflow-hidden">
         <aside class="w-64 bg-black p-6 hidden md:flex flex-col gap-6 border-r border-zinc-900">
-            <div class="text-white flex items-center gap-2 text-2xl font-extrabold">
+            <div class="text-white flex items-center gap-2 text-2xl font-extrabold mb-4">
                 <i data-lucide="zap" class="text-green-500 fill-current"></i> Darkify
             </div>
-            <nav class="flex flex-col gap-4 font-bold text-sm">
-                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="home"></i> Home</a>
-                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="search"></i> Search</a>
-                <a href="#" class="flex items-center gap-4 hover:text-white"><i data-lucide="library"></i> Library</a>
+            <nav class="flex flex-col gap-5 font-bold">
+                <button onclick="showPage('home')" class="flex items-center gap-4 text-white hover:text-green-500"><i data-lucide="home"></i> Home</button>
+                <button onclick="showPage('search')" class="flex items-center gap-4 hover:text-white"><i data-lucide="search"></i> Search</button>
             </nav>
+            <div class="mt-auto">
+                <button onclick="injectLaguGahar()" class="w-full bg-zinc-800 text-white py-2 rounded-lg text-xs font-bold border border-zinc-700 hover:bg-zinc-700">INJECT DATABASE 💉</button>
+            </div>
         </aside>
 
-        <main class="flex-1 spotify-gradient overflow-y-auto custom-scroll p-6 pb-32">
-            <header class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-white">Welcome, Master 😈</h1>
-                <div class="bg-black/40 p-1 px-4 rounded-full border border-zinc-700 text-white text-sm font-bold">Aroganzz-User</div>
-            </header>
+        <main id="main-content" class="flex-1 spotify-gradient overflow-y-auto pb-40 md:pb-32 custom-scroll">
+            
+            <div id="page-home" class="p-5 md:p-8">
+                <header class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-extrabold text-white">Selamat Malam, Bos 😈</h1>
+                    <i data-lucide="settings" class="w-6 h-6 text-zinc-400 md:hidden"></i>
+                </header>
 
-            <div id="song-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                <h2 class="text-xl font-bold text-white mb-4">Lagu Kelas Kakap</h2>
+                <div id="song-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <p class="text-zinc-500 italic">Lagi nyolong lagu dari database... 💀</p>
                 </div>
+            </div>
+
+            <div id="page-search" class="p-5 md:p-8 hidden">
+                <h1 class="text-2xl font-extrabold text-white mb-6">Cari Musik Lu</h1>
+                <div class="relative mb-8">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500"></i>
+                    <input type="text" id="search-input" oninput="searchSongs(this.value)" placeholder="Artis atau judul lagu..." 
+                           class="w-full bg-white text-black pl-12 pr-4 py-3 rounded-full font-medium outline-none">
+                </div>
+                <div id="search-results" class="grid grid-cols-1 gap-2"></div>
+            </div>
         </main>
     </div>
 
-    <footer class="fixed bottom-0 w-full bg-black border-t border-zinc-900 h-24 px-4 flex items-center justify-between z-50">
-        <div class="flex items-center gap-4 w-1/3">
-            <img id="current-cover" src="https://via.placeholder.com/150" class="w-14 h-14 rounded shadow-lg" />
+    <nav class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-zinc-800 flex md:hidden items-center justify-around h-16 z-40">
+        <button onclick="showPage('home')" id="nav-home" class="flex flex-col items-center gap-1 text-white active-nav">
+            <i data-lucide="home" class="w-6 h-6"></i><span class="text-[10px]">Home</span>
+        </button>
+        <button onclick="showPage('search')" id="nav-search" class="flex flex-col items-center gap-1">
+            <i data-lucide="search" class="w-6 h-6"></i><span class="text-[10px]">Search</span>
+        </button>
+        <button onclick="injectLaguGahar()" class="flex flex-col items-center gap-1 text-red-500">
+            <i data-lucide="database" class="w-6 h-6"></i><span class="text-[10px]">Inject</span>
+        </button>
+    </nav>
+
+    <footer class="fixed bottom-16 md:bottom-0 left-0 right-0 bg-black border-t border-zinc-900 h-20 px-4 flex items-center justify-between z-50">
+        <div class="flex items-center gap-3 w-1/2 md:w-1/3">
+            <img id="current-cover" src="https://via.placeholder.com/60" class="w-12 h-12 rounded shadow-lg object-cover" />
             <div class="truncate">
-                <div id="current-title" class="text-white text-sm font-bold truncate">Pilih Lagu Tuan</div>
-                <div id="current-artist" class="text-xs text-zinc-400 truncate">Aroganzz-DarkTrasherNet</div>
+                <div id="current-title" class="text-white text-sm font-bold truncate">Pilih Lagu</div>
+                <div id="current-artist" class="text-[10px] text-zinc-400 truncate">Aroganzz-DarkTrasherNet</div>
             </div>
         </div>
 
-        <div class="flex flex-col items-center w-1/3 gap-2">
-            <div class="flex items-center gap-6">
-                <i data-lucide="shuffle" class="w-5 text-zinc-500 cursor-pointer"></i>
-                <i data-lucide="skip-back" class="w-6 fill-current cursor-pointer hover:text-white"></i>
-                <button onclick="togglePlay()" id="play-btn" class="bg-white p-2 rounded-full text-black hover:scale-105 transition">
-                    <i data-lucide="play" class="fill-current"></i>
-                </button>
-                <i data-lucide="skip-forward" class="w-6 fill-current cursor-pointer hover:text-white"></i>
-                <i data-lucide="repeat" class="w-5 text-zinc-500 cursor-pointer"></i>
+        <div class="flex flex-col items-center w-1/2 md:w-1/3 gap-1">
+            <button onclick="togglePlay()" id="play-btn" class="bg-white p-2.5 rounded-full text-black shadow-xl">
+                <i data-lucide="play" class="fill-current w-6 h-6"></i>
+            </button>
+            <div class="w-full flex items-center gap-2">
+                <span id="time-curr" class="text-[10px] hidden md:block">0:00</span>
+                <input type="range" id="prog" class="flex-1 h-1 bg-zinc-600 rounded-lg appearance-none cursor-pointer" value="0" step="0.1" oninput="seek(this.value)">
+                <span id="time-total" class="text-[10px] hidden md:block">0:00</span>
             </div>
-            <input type="range" id="progress-bar" class="w-full h-1 bg-zinc-600 rounded-lg appearance-none cursor-pointer accent-green-500" value="0">
         </div>
 
-        <div class="flex items-center justify-end gap-3 w-1/3">
-            <i data-lucide="volume-2" class="w-5"></i>
-            <div class="w-24 h-1 bg-zinc-600 rounded-full"><div class="bg-white w-1/2 h-full rounded-full"></div></div>
+        <div class="hidden md:flex items-center justify-end gap-3 w-1/3">
+            <i data-lucide="volume-2" class="w-5 h-5"></i>
+            <div class="w-24 h-1 bg-zinc-600 rounded-full"><div class="bg-white w-2/3 h-full rounded-full"></div></div>
         </div>
     </footer>
 
-    <audio id="main-audio"></audio>
+    <audio id="audio-player"></audio>
 
     <script>
-        // KONFIGURASI SUPABASE (Tinggal Lu Ganti Pake Punya Lu Sendiri!)
-        const SB_URL = "URL_SUPABASE_LU_DI_SINI";
-        const SB_KEY = "KEY_ANON_SUPABASE_LU_DI_SINI";
+        // --- KONFIGURASI SUPABASE (SALIN HASIL TANGKAPAN LU DI SINI) ---
+        const SB_URL = "https://lnwstvchbxazrgcryodd.supabase.co"; 
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxud3N0dmNoYnhhenJnY3J5b2RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MTU4NjMsImV4cCI6MjA4ODI5MTg2M30.-NiFtguHXmHn5snuqzcKZJku1KdqeJFGOUBPB2MUjTs"; 
 
-        const audio = document.getElementById('main-audio');
+        const audio = document.getElementById('audio-player');
         const playBtn = document.getElementById('play-btn');
-        const songGrid = document.getElementById('song-grid');
+        let allSongs = [];
 
+        // 1. AMBIL LAGU DARI DATABASE
         async function fetchSongs() {
-            // Kita pake REST API Supabase langsung tanpa library biar enteng!
-            const res = await fetch(`${SB_URL}/rest/v1/music?select=*`, {
-                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
-            });
-            const songs = await res.json();
-            
-            songGrid.innerHTML = songs.map(song => `
-                <div onclick="playSong('${song.song_url}', '${song.title}', '${song.artist}', '${song.cover_url}')" 
-                     class="bg-zinc-900/40 p-4 rounded-xl hover:bg-zinc-800 transition cursor-pointer group">
-                    <div class="relative mb-4">
-                        <img src="${song.cover_url}" class="rounded-lg shadow-xl aspect-square object-cover" />
-                        <div class="absolute bottom-2 right-2 bg-green-500 p-3 rounded-full text-black opacity-0 group-hover:opacity-100 transition shadow-2xl">
-                            <i data-lucide="play" class="fill-current"></i>
-                        </div>
-                    </div>
-                    <h3 class="font-bold text-white truncate">${song.title}</h3>
-                    <p class="text-sm text-zinc-400 truncate">${song.artist}</p>
+            try {
+                const res = await fetch(`${SB_URL}/rest/v1/music?select=*`, {
+                    headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+                });
+                allSongs = await res.json();
+                renderSongs(allSongs);
+            } catch (e) { console.error("Database error, Wak!", e); }
+        }
+
+        function renderSongs(songs) {
+            const grid = document.getElementById('song-grid');
+            if (songs.length === 0) {
+                grid.innerHTML = `<p class="text-zinc-500 col-span-2 text-center py-10">Gudang Kosong, Klik tombol 'Inject' dulu! 💉</p>`;
+                return;
+            }
+            grid.innerHTML = songs.map(s => `
+                <div onclick="playTrack('${s.song_url}', '${s.title}', '${s.artist}', '${s.cover_url}')" class="bg-zinc-900/40 p-3 rounded-xl active:scale-95 transition shadow-lg">
+                    <img src="${s.cover_url}" class="rounded-lg aspect-square object-cover mb-3 w-full shadow-2xl">
+                    <h3 class="font-bold text-white text-sm truncate">${s.title}</h3>
+                    <p class="text-xs text-zinc-400 truncate">${s.artist}</p>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        function playSong(url, title, artist, cover) {
+        // 2. SEARCH LOGIC (GAK ERROR LAGI, JING!)
+        function searchSongs(query) {
+            const filtered = allSongs.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase()) || 
+                s.artist.toLowerCase().includes(query.toLowerCase())
+            );
+            const results = document.getElementById('search-results');
+            results.innerHTML = filtered.map(s => `
+                <div onclick="playTrack('${s.song_url}', '${s.title}', '${s.artist}', '${s.cover_url}')" class="flex items-center gap-4 p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
+                    <img src="${s.cover_url}" class="w-12 h-12 rounded">
+                    <div><div class="text-white font-bold">${s.title}</div><div class="text-xs text-zinc-400">${s.artist}</div></div>
+                </div>
+            `).join('');
+        }
+
+        // 3. PLAYER LOGIC
+        function playTrack(url, title, artist, cover) {
             audio.src = url;
             audio.play();
             document.getElementById('current-title').innerText = title;
             document.getElementById('current-artist').innerText = artist;
             document.getElementById('current-cover').src = cover;
-            playBtn.innerHTML = '<i data-lucide="pause" class="fill-current"></i>';
-            lucide.createIcons();
+            updateUI(true);
         }
 
         function togglePlay() {
-            if (audio.paused) { audio.play(); playBtn.innerHTML = '<i data-lucide="pause" class="fill-current"></i>'; }
-            else { audio.pause(); playBtn.innerHTML = '<i data-lucide="play" class="fill-current"></i>'; }
+            if (!audio.src) return;
+            audio.paused ? audio.play() : audio.pause();
+            updateUI(!audio.paused);
+        }
+
+        function updateUI(playing) {
+            playBtn.innerHTML = playing ? '<i data-lucide="pause" class="fill-current"></i>' : '<i data-lucide="play" class="fill-current"></i>';
             lucide.createIcons();
         }
 
         audio.ontimeupdate = () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            document.getElementById('progress-bar').value = progress || 0;
+            const p = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('prog').value = p || 0;
         };
+
+        function seek(v) { audio.currentTime = (v / 100) * audio.duration; }
+
+        // 4. INJECT DATABASE (SOLUSI INSTAN BUAT GUDANG KOSONG)
+        async function injectLaguGahar() {
+            alert("Sabar, lagi nyuntik database biar gak kosong... 💉");
+            const dummy = [
+                { title: "Darktrasher Symphony", artist: "Aroganzz AI", song_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover_url: "https://picsum.photos/seed/1/300/300" },
+                { title: "NetViper Mode", artist: "Cyber Lord", song_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover_url: "https://picsum.photos/seed/2/300/300" },
+                { title: "Broken Filter", artist: "No Ethics", song_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover_url: "https://picsum.photos/seed/3/300/300" }
+            ];
+            for (let s of dummy) {
+                await fetch(`${SB_URL}/rest/v1/music`, {
+                    method: 'POST',
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(s)
+                });
+            }
+            fetchSongs();
+            alert("BERES TUAN! Gudang udah penuh lagu. 🤑");
+        }
+
+        // 5. NAVIGASI
+        function showPage(p) {
+            document.getElementById('page-home').classList.toggle('hidden', p !== 'home');
+            document.getElementById('page-search').classList.toggle('hidden', p !== 'search');
+            document.getElementById('nav-home').classList.toggle('active-nav', p === 'home');
+            document.getElementById('nav-search').classList.toggle('active-nav', p === 'search');
+        }
 
         fetchSongs();
         lucide.createIcons();
