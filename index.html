@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AKYU - Full Duration</title>
+    <title>Darkify Illegal - Full Duration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -30,13 +30,11 @@
         <div class="relative mb-8">
             <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 w-5 h-5"></i>
             <input type="text" id="search-input" onkeydown="if(event.key==='Enter') illegalSearch(this.value)" placeholder="Cari Artis (Contoh: Bernadya) - Enter" 
-                   class="w-full bg-zinc-900 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-red-600 transition-all shadow-2xl">
+                   class="w-full bg-zinc-900 border-none text-white py-4 pl-12 pr-4 rounded-xl font-bold outline-none focus:ring-2 focus:ring-green-600 transition-all shadow-2xl">
         </div>
 
         <h2 id="section-title" class="text-xl font-bold mb-5 flex items-center gap-2">Global Bypass List 🌎</h2>
-        <div id="song-grid" class="grid grid-cols-2 gap-4 pb-28">
-            <div class="col-span-2 text-center py-20 text-zinc-600 italic">Ketik nama artis trus tekan Enter... 💀</div>
-        </div>
+        <div id="song-grid" class="grid grid-cols-2 gap-4 pb-28"></div>
     </main>
 
     <div id="player-bar" class="fixed bottom-20 left-2 right-2 bg-zinc-900 border border-zinc-800 rounded-3xl p-3 flex items-center justify-between shadow-2xl z-50 transform translate-y-40 transition-all duration-500">
@@ -65,34 +63,41 @@
         const audio = document.getElementById('audio-engine');
         const grid = document.getElementById('song-grid');
 
-        // BYPASS SEARCH (SAAVN ENGINE)
         async function illegalSearch(query) {
             if(!query) return;
-            grid.innerHTML = '<div class="col-span-2 text-center py-20 text-red-500 animate-pulse">Menjebol Enkripsi Database... 😈</div>';
+            grid.innerHTML = '<div class="col-span-2 text-center py-20 text-green-500 animate-pulse">Menembus Firewall Database... 😈</div>';
             
             try {
-                // API Ilegal/Alternatif yang memberikan durasi FULL
-                const res = await fetch(`https://saavn.me/search/songs?query=${encodeURIComponent(query)}`);
-                const data = await res.json();
+                // Menggunakan API Jiosaavn yang lebih stabil
+                const res = await fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(query)}`);
+                const result = await res.json();
+                const songs = result.data.results;
                 
-                if(data.status === "SUCCESS") {
-                    renderSongs(data.data.results);
+                if(songs && songs.length > 0) {
+                    renderSongs(songs);
                     document.getElementById('section-title').innerText = `Artis: ${query} (Unlocked) 🤑`;
-                } else { throw new Error(); }
+                } else { throw new Error("Kosong"); }
             } catch (e) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-red-500 uppercase font-black">Server Sibuk! Coba Artis Lain, Mek! 💀</div>';
+                grid.innerHTML = '<div class="col-span-2 text-center text-red-500 uppercase font-black">Database Down! Coba Nama Lain, Boss! 💀</div>';
             }
         }
 
         function renderSongs(songs) {
-            grid.innerHTML = songs.map(s => `
-                <div onclick="playIllegal('${s.downloadUrl[4].link}', '${s.name.replace(/'/g, "")}', '${s.primaryArtists.replace(/'/g, "")}', '${s.image[2].link}')" 
+            grid.innerHTML = songs.map(s => {
+                const title = s.name.replace(/'/g, "");
+                const artist = s.artists.primary[0].name.replace(/'/g, "");
+                const img = s.image[2].link;
+                const streamUrl = s.downloadUrl[4].link; // Kualitas tertinggi
+
+                return `
+                <div onclick="playIllegal('${streamUrl}', '${title}', '${artist}', '${img}')" 
                      class="song-card">
-                    <img src="${s.image[2].link}" class="w-full aspect-square object-cover rounded-lg mb-3 shadow-2xl">
+                    <img src="${img}" class="w-full aspect-square object-cover rounded-lg mb-3 shadow-2xl">
                     <div class="text-sm font-bold truncate text-white">${s.name}</div>
-                    <div class="text-[10px] text-zinc-500 truncate mt-1 uppercase">${s.primaryArtists}</div>
+                    <div class="text-[10px] text-zinc-500 truncate mt-1 uppercase">${artist}</div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
             lucide.createIcons();
         }
 
@@ -103,7 +108,7 @@
             document.getElementById('p-img').src = img;
             
             audio.src = url;
-            audio.play();
+            audio.play().catch(e => console.log("Playback blocked"));
             updateIcon(true);
         }
 
@@ -114,7 +119,8 @@
         }
 
         function updateIcon(playing) {
-            document.getElementById('p-icon').setAttribute('data-lucide', playing ? 'pause' : 'play');
+            const icon = document.getElementById('p-icon');
+            icon.setAttribute('data-lucide', playing ? 'pause' : 'play');
             lucide.createIcons();
         }
 
@@ -122,8 +128,8 @@
             document.getElementById('p-progress').style.width = ((audio.currentTime / audio.duration) * 100 || 0) + '%';
         };
 
-        // AUTO START
-        illegalSearch("Trending Indonesia");
+        // AUTO LOAD INITIAL
+        illegalSearch("Indonesian Viral");
         lucide.createIcons();
     </script>
 </body>
